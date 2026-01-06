@@ -1,4 +1,4 @@
 import { jest } from '@jest/globals'
 
-export const findFabricAPIVersion =
-  jest.fn<typeof import('../src/version.js').findFabricAPIVersion>()
+export const findFabricLoaderVersion =
+  jest.fn<typeof import('../src/version.js').findFabricLoaderVersion>()

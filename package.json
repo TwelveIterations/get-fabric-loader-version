@@ -1,17 +1,17 @@
 {
-  "name": "get-fabric-api-version",
-  "description": "Finds the latest Fabric API version for a Minecraft version",
+  "name": "get-fabric-loader-version",
+  "description": "Finds the latest Fabric Loader version for a Minecraft version",
   "version": "1.0.0",
   "author": "BlayTheNinth",
   "type": "module",
   "private": true,
-  "homepage": "https://github.com/TwelveIterations/get-fabric-api-version#readme",
+  "homepage": "https://github.com/TwelveIterations/get-fabric-loader-version#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TwelveIterations/get-fabric-api-version.git"
+    "url": "git+https://github.com/TwelveIterations/get-fabric-loader-version.git"
   },
   "bugs": {
-    "url": "https://github.com/TwelveIterations/get-fabric-api-version/issues"
+    "url": "https://github.com/TwelveIterations/get-fabric-loader-version/issues"
   },
   "keywords": [
     "actions"

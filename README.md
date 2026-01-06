@@ -1,15 +1,15 @@
-# get-fabric-api-version
+# get-fabric-loader-version
 
-![Linter](https://github.com/TwelveIterations/get-fabric-api-version/actions/workflows/linter.yml/badge.svg)
-![CI](https://github.com/TwelveIterations/get-fabric-api-version/actions/workflows/ci.yml/badge.svg)
-![Check dist/](https://github.com/TwelveIterations/get-fabric-api-version/actions/workflows/check-dist.yml/badge.svg)
-![CodeQL](https://github.com/TwelveIterations/get-fabric-api-version/actions/workflows/codeql-analysis.yml/badge.svg)
+![Linter](https://github.com/TwelveIterations/get-fabric-loader-version/actions/workflows/linter.yml/badge.svg)
+![CI](https://github.com/TwelveIterations/get-fabric-loader-version/actions/workflows/ci.yml/badge.svg)
+![Check dist/](https://github.com/TwelveIterations/get-fabric-loader-version/actions/workflows/check-dist.yml/badge.svg)
+![CodeQL](https://github.com/TwelveIterations/get-fabric-loader-version/actions/workflows/codeql-analysis.yml/badge.svg)
 ![Coverage](./badges/coverage.svg)
 
 ## Usage
 
 ```yaml
-uses: TwelveIterations/get-fabric-api-version@v1
+uses: TwelveIterations/get-fabric-loader-version@v1
 with:
   version: '21.11.*'
 ```

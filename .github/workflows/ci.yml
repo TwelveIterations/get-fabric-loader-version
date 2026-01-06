@@ -56,8 +56,6 @@ jobs:
       - name: Test Local Action
         id: test-action
         uses: ./
-        with:
-          minecraftVersion: '1.21.11'
 
       - name: Print Output
         id: output

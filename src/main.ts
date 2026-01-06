@@ -1,14 +1,9 @@
 import * as core from '@actions/core'
-import { findFabricAPIVersion } from './version.js'
+import { findFabricLoaderVersion } from './version.js'
 
 export async function run(): Promise<void> {
   try {
-    const minecraftVersion: string = core.getInput('minecraftVersion', {
-      required: true
-    })
-
-    const result = await findFabricAPIVersion({ minecraftVersion })
-
+    const result = await findFabricLoaderVersion()
     if (result) {
       core.setOutput('version', result)
     } else {

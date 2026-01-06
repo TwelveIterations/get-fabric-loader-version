@@ -27487,31 +27487,18 @@ function requireCore () {
 
 var coreExports = requireCore();
 
-async function findFabricAPIVersion(options) {
-    const { minecraftVersion } = options;
-    if (!minecraftVersion || typeof minecraftVersion !== 'string') {
-        throw new Error('minecraftVersion is not a string');
-    }
+async function findFabricLoaderVersion() {
     const response = await fetch('https://maven.fabricmc.net/jdlist.txt');
     const content = await response.text();
     const lines = content.split('\n').reverse();
-    let apiVersion = lines.find((it) => it.startsWith('fabric-api-') && it.endsWith(`+${minecraftVersion}`));
-    const baseMinecraftVersion = minecraftVersion.split('.').slice(0, 2).join('.');
-    if (!apiVersion) {
-        apiVersion = lines.find((it) => it.match(new RegExp(`fabric-api-.+\\+${baseMinecraftVersion}\\..+`, 'g')));
-    }
-    if (!apiVersion) {
-        apiVersion = lines.find((it) => it.startsWith('fabric-api-') && it.endsWith(`+${baseMinecraftVersion}`));
-    }
-    return apiVersion;
+    return lines
+        .find((it) => it.startsWith('fabric-loader-'))
+        ?.substring('fabric-loader-'.length);
 }
 
 async function run() {
     try {
-        const minecraftVersion = coreExports.getInput('minecraftVersion', {
-            required: true
-        });
-        const result = await findFabricAPIVersion({ minecraftVersion });
+        const result = await findFabricLoaderVersion();
         if (result) {
             coreExports.setOutput('version', result);
         }

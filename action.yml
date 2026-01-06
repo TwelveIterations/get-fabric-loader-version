@@ -1,19 +1,15 @@
-name: 'Get Fabric API Version'
-description: 'Finds the latest Fabric API version matching a Minecraft version'
+name: 'Get Fabric Loader Version'
+description:
+  'Finds the latest Fabric Loader version matching a Minecraft version'
 author: Twelve Iterations
 
 branding:
   icon: heart
   color: red
 
-inputs:
-  minecraftVersion:
-    description: 'Minecraft version to search for (e.g., 1.21.11)'
-    required: true
-
 outputs:
   version:
-    description: 'The latest Fabric API version matching the search criteria'
+    description: 'The latest Fabric Loader version matching the search criteria'
 
 runs:
   using: node20

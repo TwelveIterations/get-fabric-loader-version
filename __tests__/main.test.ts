@@ -7,11 +7,13 @@
  */
 import { jest } from '@jest/globals'
 import * as core from '../__fixtures__/core.js'
-import { findFabricAPIVersion } from '../__fixtures__/version.js'
+import { findFabricLoaderVersion } from '../__fixtures__/version.js'
 
 // Mocks should be declared before the module being tested is imported.
 jest.unstable_mockModule('@actions/core', () => core)
-jest.unstable_mockModule('../src/version.js', () => ({ findFabricAPIVersion }))
+jest.unstable_mockModule('../src/version.js', () => ({
+  findFabricLoaderVersion
+}))
 
 // The module being tested should be imported dynamically. This ensures that the
 // mocks are used in place of any actual dependencies.
@@ -21,14 +23,12 @@ describe('main.ts', () => {
   beforeEach(() => {
     // Set the action's inputs as return values from core.getInput().
     core.getInput.mockImplementation((name: string) => {
-      const inputs: Record<string, string> = {
-        minecraftVersion: '1.21.11'
-      }
+      const inputs: Record<string, string> = {}
       return inputs[name] || ''
     })
 
-    // Mock findFabricAPIVersion to return a version.
-    findFabricAPIVersion.mockImplementation(() =>
+    // Mock findFabricLoaderVersion to return a version.
+    findFabricLoaderVersion.mockImplementation(() =>
       Promise.resolve('0.69.0+1.21.11')
     )
   })
@@ -40,18 +40,16 @@ describe('main.ts', () => {
   it('Sets the version output when a version is found', async () => {
     await run()
 
-    // Verify findFabricAPIVersion was called with correct parameters.
-    expect(findFabricAPIVersion).toHaveBeenCalledWith({
-      minecraftVersion: '1.21.11'
-    })
+    // Verify findFabricLoaderVersion was called with correct parameters.
+    expect(findFabricLoaderVersion).toHaveBeenCalled()
 
     // Verify the version output was set.
     expect(core.setOutput).toHaveBeenCalledWith('version', '0.69.0+1.21.11')
   })
 
   it('Sets a failed status when no version is found', async () => {
-    // Mock findFabricAPIVersion to return undefined.
-    findFabricAPIVersion.mockClear().mockResolvedValueOnce(undefined)
+    // Mock findFabricLoaderVersion to return undefined.
+    findFabricLoaderVersion.mockClear().mockResolvedValueOnce(undefined)
 
     await run()
 
@@ -60,16 +58,16 @@ describe('main.ts', () => {
   })
 
   it('Sets a failed status when an error occurs', async () => {
-    // Mock findFabricAPIVersion to throw an error.
-    findFabricAPIVersion
+    // Mock findFabricLoaderVersion to throw an error.
+    findFabricLoaderVersion
       .mockClear()
-      .mockRejectedValueOnce(new Error('Fabric API request failed: 500'))
+      .mockRejectedValueOnce(new Error('Fabric Loader request failed: 500'))
 
     await run()
 
     // Verify that the action was marked as failed.
     expect(core.setFailed).toHaveBeenCalledWith(
-      'Fabric API request failed: 500'
+      'Fabric Loader request failed: 500'
     )
   })
 })
