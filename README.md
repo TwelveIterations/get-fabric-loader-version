@@ -1,116 +1,133 @@
-# Create a JavaScript Action
+# get-fabric-api-version
 
-<p align="center">
-  <a href="https://github.com/actions/javascript-action/actions"><img alt="javscript-action status" src="https://github.com/actions/javascript-action/workflows/units-test/badge.svg"></a>
-</p>
-
-Use this template to bootstrap the creation of a JavaScript action.:rocket:
-
-This template includes tests, linting, a validation workflow, publishing, and versioning guidance.
-
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-Install the dependencies
-
-```bash
-npm install
-```
-
-Run the tests :heavy_check_mark:
-
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-const core = require('@actions/core');
-...
-
-async function run() {
-  try {
-      ...
-  }
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Package for distribution
-
-GitHub Actions will run the entry point from the action.yml. Packaging assembles the code into one file that can be checked in to Git, enabling fast and reliable execution and preventing the need to check in node_modules.
-
-Actions are run from GitHub repos.  Packaging the action will create a packaged action in the dist folder.
-
-Run prepare
-
-```bash
-npm run prepare
-```
-
-Since the packaged index.js is run from the dist folder.
-
-```bash
-git add dist
-```
-
-## Create a release branch
-
-Users shouldn't consume the action from master since that would be latest code and actions can break compatibility between major versions.
-
-Checkin to the v1 release branch
-
-```bash
-git checkout -b v1
-git commit -a -m "v1 release"
-```
-
-```bash
-git push origin v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket:
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
+![Linter](https://github.com/TwelveIterations/get-fabric-api-version/actions/workflows/linter.yml/badge.svg)
+![CI](https://github.com/TwelveIterations/get-fabric-api-version/actions/workflows/ci.yml/badge.svg)
+![Check dist/](https://github.com/TwelveIterations/get-fabric-api-version/actions/workflows/check-dist.yml/badge.svg)
+![CodeQL](https://github.com/TwelveIterations/get-fabric-api-version/actions/workflows/codeql-analysis.yml/badge.svg)
+![Coverage](./badges/coverage.svg)
 
 ## Usage
 
-You can now consume the action by referencing the v1 branch
-
 ```yaml
-uses: actions/javascript-action@v1
+uses: TwelveIterations/get-fabric-api-version@v1
 with:
-  milliseconds: 1000
+  version: '21.11.*'
 ```
 
-See the [actions tab](https://github.com/actions/javascript-action/actions) for runs of this action! :rocket:
+## Development
+
+After you've cloned the repository to your local machine or codespace, you'll
+need to perform some initial setup steps before you can develop your action.
+
+> [!NOTE]
+>
+> You'll need to have a reasonably modern version of
+> [Node.js](https://nodejs.org) handy (20.x or later should work!). If you are
+> using a version manager like [`nodenv`](https://github.com/nodenv/nodenv) or
+> [`fnm`](https://github.com/Schniz/fnm), this repository has a `.node-version`
+> file at the root that can be used to automatically switch to the correct
+> version when you `cd` into the repository. Additionally, this `.node-version`
+> file is used by GitHub Actions in any `actions/setup-node` actions.
+
+1. :hammer_and_wrench: Install the dependencies
+
+   ```bash
+   npm install
+   ```
+
+1. :building_construction: Package the TypeScript for distribution
+
+   ```bash
+   npm run bundle
+   ```
+
+1. :white_check_mark: Run the tests
+
+   ```bash
+   $ npm test
+
+   PASS  ./index.test.js
+     ✓ throws invalid number (3ms)
+     ✓ wait 500 ms (504ms)
+     ✓ test runs (95ms)
+
+   ...
+   ```
+
+1. :bug: Test your action locally
+
+   ```bash
+   npx @github/local-action . src/main.ts .env
+   ```
+
+## Publishing a New Release
+
+This project includes a helper script, [`script/release`](./script/release)
+designed to streamline the process of tagging and pushing new releases for
+GitHub Actions.
+
+GitHub Actions allows users to select a specific version of the action to use,
+based on release tags. This script simplifies this process by performing the
+following steps:
+
+1. **Retrieving the latest release tag:** The script starts by fetching the most
+   recent SemVer release tag of the current branch, by looking at the local data
+   available in your repository.
+1. **Prompting for a new release tag:** The user is then prompted to enter a new
+   release tag. To assist with this, the script displays the tag retrieved in
+   the previous step, and validates the format of the inputted tag (vX.X.X). The
+   user is also reminded to update the version field in package.json.
+1. **Tagging the new release:** The script then tags a new release and syncs the
+   separate major tag (e.g. v1, v2) with the new release tag (e.g. v1.0.0,
+   v2.1.2). When the user is creating a new major release, the script
+   auto-detects this and creates a `releases/v#` branch for the previous major
+   version.
+1. **Pushing changes to remote:** Finally, the script pushes the necessary
+   commits, tags and branches to the remote repository. From here, you will need
+   to create a new release in GitHub so users can easily reference the new tags
+   in their workflows.
+
+## Dependency License Management
+
+This template includes a GitHub Actions workflow,
+[`licensed.yml`](./.github/workflows/licensed.yml), that uses
+[Licensed](https://github.com/licensee/licensed) to check for dependencies with
+missing or non-compliant licenses. This workflow is initially disabled. To
+enable the workflow, follow the below steps.
+
+1. Open [`licensed.yml`](./.github/workflows/licensed.yml)
+1. Uncomment the following lines:
+
+   ```yaml
+   # pull_request:
+   #   branches:
+   #     - main
+   # push:
+   #   branches:
+   #     - main
+   ```
+
+1. Save and commit the changes
+
+Once complete, this workflow will run any time a pull request is created or
+changes pushed directly to `main`. If the workflow detects any dependencies with
+missing or non-compliant licenses, it will fail the workflow and provide details
+on the issue(s) found.
+
+### Updating Licenses
+
+Whenever you install or update dependencies, you can use the Licensed CLI to
+update the licenses database. To install Licensed, see the project's
+[Readme](https://github.com/licensee/licensed?tab=readme-ov-file#installation).
+
+To update the cached licenses, run the following command:
+
+```bash
+licensed cache
+```
+
+To check the status of cached licenses, run the following command:
+
+```bash
+licensed status
+```
