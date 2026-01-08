@@ -27503,7 +27503,7 @@ async function run() {
             coreExports.setOutput('version', result);
         }
         else {
-            coreExports.setFailed('No matching version found');
+            coreExports.setFailed('No matching Fabric Loader version found');
         }
     }
     catch (error) {
